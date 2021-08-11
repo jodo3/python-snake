@@ -112,7 +112,7 @@ class Board:
                 self.snake.score += constants.FOOD
                 self.new_food()
             self.grid[x][y] = 3
-            self.grid[self.snake.tail[0]][self.snake.tail[0]] = 4
+            self.grid[self.snake.tail[0]][self.snake.tail[1]] = 4
             self.print_board()
             self.grid[x][y] = 1
         else:
@@ -155,49 +155,32 @@ class Board:
                 next_dir = self.snake.body[i+1]
                 target = self.parts[dir + next_dir]
             self.add_part(target, coords)
-
-
-        # for row in range(constants.ROWS):
-        #     for col in range(constants.COLS):
-        #         value = self.grid[col][row]
-        #         if value == 0 or value == 2:
-        #             target = self.parts[value]
-        #         elif value == 3 or value == 4:
-        #             key = self.snake.direction + (value,)
-        #             target = self.parts[key]
-        #         else:
-        #             target = self.parts[self.snake.direction + self.snake.body[0]]
-        #         surface = pygame.Surface((64, 64))
-        #         surface.blit(self.snakeImg, (0, 0), target + (64, 64))
-        #         self.screen.blit(surface, (row*constants.SQUARE_SIZE+25, col*constants.SQUARE_SIZE+75))
-
         self.GAME_FONT.render_to(self.screen, (10, 10), f"Score: {self.snake.score}", fgcolor=constants.YELLOW)
         pygame.display.update()
 
     def new_food(self):
         index = math.floor(random()*(self.length*self.width-self.snake.score))
-        print(index)
-        while True:
-            for a in range(self.length):
-                for b in range(self.width):
-                    if self.grid[a][b] == 0:
-                        index -= 1
-                        if index < 0:
-                            self.foodc = (a, b)
-                            self.grid[a][b] = 2
-                            print(self.foodc)
-                            return
-            print(f"not found: {index}")
-        return
+        for a in range(self.length):
+            for b in range(self.width):
+                if self.grid[a][b] == 0:
+                    index -= 1
+                    if index < 0:
+                        self.foodc = (a, b)
+                        self.grid[a][b] = 2
+                        return
 
 
 class Snake:
 
     directions = {
         'w': (1, 0),
+        'up': (1, 0),
         'a': (0, 1),
+        'left': (0, 1),
         's': (-1, 0),
-        'd': (0, -1)
+        'down': (-1, 0),
+        'd': (0, -1),
+        'right': (0, -1)
     }
 
     def __init__(self, score=3):
@@ -226,11 +209,16 @@ class Snake:
 
 
 def on_press(key):
-    snake.new_press(str(key)[1])
+    try:
+        snake.new_press(key.char)
+    except AttributeError:
+        snake.new_press(key.name)
 
 
 def on_release(key):
     if key == Key.esc:
+        listener.stop()
+        board.rt.stop()
         return False
 
 
@@ -246,5 +234,5 @@ while run:
     pass
 
 pygame.quit()
-
+exit()
 
