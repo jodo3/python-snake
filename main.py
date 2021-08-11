@@ -1,7 +1,6 @@
 import math
 import operator
 from random import random
-
 from pynput.keyboard import Key, Listener
 from threading import Timer
 import pygame
@@ -113,7 +112,6 @@ class Board:
                 self.new_food()
             self.grid[x][y] = 3
             self.grid[self.snake.tail[0]][self.snake.tail[1]] = 4
-            self.grid[self.snake.tail[0]][self.snake.tail[0]] = 4
             self.print_board()
             self.grid[x][y] = 1
         else:
@@ -156,7 +154,6 @@ class Board:
                 next_dir = self.snake.body[i+1]
                 target = self.parts[dir + next_dir]
             self.add_part(target, coords)
-
         self.GAME_FONT.render_to(self.screen, (10, 10), f"Score: {self.snake.score}", fgcolor=constants.YELLOW)
         pygame.display.update()
 
@@ -183,7 +180,6 @@ class Snake:
         'down': (-1, 0),
         'd': (0, -1),
         'right': (0, -1),
-        'a': (0, 1),
     }
 
     def __init__(self, score=3):
@@ -237,4 +233,3 @@ while run:
     pass
 
 pygame.quit()
-
