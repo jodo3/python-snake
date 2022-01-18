@@ -40,7 +40,6 @@ class RepeatedTimer(object):
 #         self.y = y
 #
 #     def add(self, new_point):
-# 
 
 
 class Board:
